@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Shell List</h2>
+
+{% for shell in shells %}
+<div class="card">
+    <a href="{% url 'detail' shell.id %}">
+        <div class="card-content">
+            <span class="card-title">{{ shell.name }}</span>
+            <p>Family: {{ shell.family }}</p>
+            <p>Color: {{ shell.color }}</p>
+            <p>Size: {{ shell.size }}</p>
+            <p>Location: {{ shell.location }}</p>
+        </div>
+    </a>
+</div>
+{% endfor %} {% endblock %}
