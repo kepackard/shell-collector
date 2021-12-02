@@ -1,15 +1,67 @@
-{% extends 'base.html' %} {% block content %}
+{% extends "base.html" %} {% block content %}
 
 <h1>Shell Details</h1>
 
-<div class="card">
-  <div class="card-content">
-    <span class="card-title">{{ shell.name }}</span>
-    <p>Family: {{ shell.family }}</p>
-    <p>Color: {{ shell.color }}</p>
-    <p>Size: {{ shell.size }}</p>
-    <p>Location: {{ shell.location }}</p>
+<div class="row">
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">{{ shell.name }}</span>
+        <p>Family: {{ shell.family }}</p>
+        <p>Color: {{ shell.color }}</p>
+        <p>Size: {{ shell.size }}</p>
+        <p>Location: {{ shell.location }}</p>
+      </div>
+      <div class="card-action">
+        <a href="{% url 'shells_update' shell.id %}">Edit</a>
+        <a href="{% url 'shells_delete' shell.id %}">Delete</a>
+      </div>
+    </div>
+  </div>
+  <div class="col s6">
+    <form action="{% url 'add_cleaning' shell.id %}" method="post">
+      {% csrf_token %} {{ cleaning_form.as_p }}
+      <input type="submit" class="btn" value="Add Cleaning" />
+    </form>
+    <br />
+    {% if shell.cleaned_for_today %} 
+    <div class="card-panel teal-text center-align">
+      {{ shell.name }} has been cleaned a bunch today
+    </div>
+    {% else %}
+    <div class="card-panel red-text center-align">
+      {{ shell.name }} might be sandy
+    </div>
+    {% endif %}
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Cleaning</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cleaning in shell.cleaning_set.all %}
+        <tr>
+          <td>{{cleaning.date}}</td>
+          <td>{{cleaning.get_time_display}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
 
+<script>
+  var dateEl = document.getElementById("id_date");
+    M.Datepicker.init(dateEl, {
+      format: "yyyy-mm-dd",
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+
+  var selectEl = document.getElementById("id_time");
+  M.FormSelect.init(selectEl);
+</script>
 {% endblock %}
