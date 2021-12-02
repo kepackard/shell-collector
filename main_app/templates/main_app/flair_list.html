@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Flair List</h1>
+
+{% for flair in flair_list %}
+  <a href="{% url 'flairs_detail' flair.id %}">
+    <div class="card">
+        <div class="card-content">
+            <span class="card-title">{{ flair.name }}</span>
+            <p>Color: {{ flair.color }}</p>
+        </div>
+    </div>
+  </a>
+{% endfor %}
+
+{% endblock %}
